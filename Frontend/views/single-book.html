@@ -1,0 +1,92 @@
+<section id="single-book" class="py-5 my-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5">
+                <figure class="product-image">
+                    <img src="images/shoe_dog.jpg" id="book-image" alt="Book Cover" class="img-fluid">
+                </figure>
+            </div>
+            <div class="col-md-7">
+                <div class="product-detail">
+                    <h2 class="section-title divider">Shoe Dog</h2>
+                    <div class="author-name">Phil Knight</div>
+                    <div class="book-meta py-4">
+                        <div class="genre">Biography, Business</div>
+                    </div>
+                    <div class="description">
+                        <p>Shoe Dog is a memoir by Nike co-founder Phil Knight. The memoir chronicles the history of Nike from its founding as Blue Ribbon Sports and its early challenges to its evolution into one of the world's most recognized and profitable companies. It also highlights certain parts of Phil Knight's life.</p>
+                        <p>In this candid and riveting memoir, for the first time ever, Nike founder and CEO Phil Knight shares the inside story of the company's early days as an intrepid start-up and its evolution into one of the world's most iconic, game-changing, and profitable brands.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reviews Section -->
+        <div class="row mt-5">
+            <div class="col-md-12">
+                <h3 class="section-title divider">Reviews</h3>
+                <div class="reviews-container">
+                    <!-- Sample Review 1 -->
+                    <div class="review-card">
+                        <div class="review-header">
+                            <span class="reviewer-name">John Doe</span>
+                            <div class="stars">
+                                <i class="icon icon-star"></i>
+                                <i class="icon icon-star"></i>
+                                <i class="icon icon-star"></i>
+                                <i class="icon icon-star"></i>
+                                <i class="icon icon-star"></i>
+                            </div>
+                        </div>
+                        <p class="review-text">An incredible journey through the creation of one of the world's most recognizable brands. Phil Knight's honesty about the struggles and challenges faced is refreshing.</p>
+                    </div>
+
+                    <!-- Sample Review 2 -->
+                    <div class="review-card">
+                        <div class="review-header">
+                            <span class="reviewer-name">Jane Smith</span>
+                            <div class="stars">
+                                <i class="icon icon-star"></i>
+                                <i class="icon icon-star"></i>
+                                <i class="icon icon-star"></i>
+                                <i class="icon icon-star"></i>
+                                <i class="icon icon-star-o"></i>
+                            </div>
+                        </div>
+                        <p class="review-text">A masterclass in entrepreneurship and perseverance. The story flows naturally and keeps you engaged throughout.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Review Form Section -->
+        <div class="row mt-5">
+            <div class="col-md-8 mx-auto">
+                <h3 class="section-title divider">Leave a Review</h3>
+                <form id="review-form" class="review-form">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Your Name</label>
+                        <input type="text" class="form-control" id="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Rating</label>
+                        <div class="star-rating">
+                            <span data-rating="1">★</span>
+                            <span data-rating="2">★</span>
+                            <span data-rating="3">★</span>
+                            <span data-rating="4">★</span>
+                            <span data-rating="5">★</span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="review" class="form-label">Your Review</label>
+                        <textarea class="form-control" id="review" rows="5" required></textarea>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-accent-arrow">Submit Review</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
