@@ -1,3 +1,3 @@
 # BookBite
 
-![BookBite Database Schema](/Frontend/images/BookBite_DB_schema.png)
+![BookBite Database Schema](/Frontend/images/BookBite DB schema.png)
