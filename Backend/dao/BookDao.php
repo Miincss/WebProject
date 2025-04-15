@@ -33,22 +33,22 @@ class BookDao extends BaseDao {
     }  
 
     public function addBook($book) {
-        $stmt = $this->connection->prepare("INSERT INTO books (title, author, genre, description, photo) VALUES (:title, :author, :genre, :description, :photo)");
+        $stmt = $this->connection->prepare("INSERT INTO books (title, author, genre, description) VALUES (:title, :author, :genre, :description)");
         $stmt->bindParam(':title', $book['title']);
         $stmt->bindParam(':author', $book['author']);
         $stmt->bindParam(':genre', $book['genre']);
         $stmt->bindParam(':description', $book['description']);
         $stmt->execute();
+        return $this->connection->lastInsertId();
     }
-        
-
 
     public function updateBook($book) {
-        $stmt = $this->connection->prepare("UPDATE books SET title = :title, author = :author, genre = :genre, description = :description, photo = :photo WHERE book_id = :id");
+        $stmt = $this->connection->prepare("UPDATE books SET title = :title, author = :author, genre = :genre, description = :description WHERE book_id = :id");
         $stmt->bindParam(':title', $book['title']);
         $stmt->bindParam(':author', $book['author']);
         $stmt->bindParam(':genre', $book['genre']);
         $stmt->bindParam(':description', $book['description']);
+        $stmt->bindParam(':id', $book['id']);
         $stmt->execute();
     }
 

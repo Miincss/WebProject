@@ -24,8 +24,9 @@ class ReviewDao extends BaseDao {
         $stmt->bindParam(':book_id', $review['book_id']);
         $stmt->bindParam(':user_id', $review['user_id']);
         $stmt->bindParam(':rating', $review['rating']);
+        $stmt->bindParam(':comment', $review['comment']);
         $stmt->execute();
-        
+        return $this->connection->lastInsertId();
     }
     public function delete($id) {
         $stmt = $this->connection->prepare("DELETE FROM reviews WHERE review_id = :id");
