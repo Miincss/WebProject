@@ -99,25 +99,5 @@ class BookService extends BaseService {
                 throw new Exception("Genre is too long (maximum 100 characters)");
             }
         }
-    }
-?>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
+?>

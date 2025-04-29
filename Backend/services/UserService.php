@@ -53,7 +53,7 @@ class UserService extends BaseService {
             $userData['password'] = password_hash($userData['password'], PASSWORD_DEFAULT);
         }
 
-        $userData['id'] = $userId;
+        $userData['user_id'] = $userId;
 
         try {
             return $this->dao->editUser($userData);
