@@ -44,6 +44,7 @@ class UserDao extends BaseDao {
         $stmt->bindParam(':email', $user['email']);
         $stmt->bindParam(':password', $user['password']);
         $stmt->bindParam(':is_admin', $user['is_admin']);
+        $stmt->bindParam(':id', $user['user_id']);
         $stmt->execute();
     }
 }

@@ -24,8 +24,10 @@ class ContactDao extends BaseDao {
         $stmt -> bindParam(':user_id', $message['user_id']);
         $stmt -> bindParam(':name', $message['name']);
         $stmt -> bindParam(':email', $message['email']);
+        $stmt -> bindParam(':subject', $message['subject']);
         $stmt -> bindParam(':message', $message['message']);
         $stmt->execute();
+        return $this->connection->lastInsertId();
     }
 
 }
