@@ -1,10 +1,15 @@
 <?php
 require_once __DIR__ . '/../services/ContactService.php';
+require_once __DIR__. '/../middleware/AuthMiddleware.php';
+
 
 /**
 * @OA\Get(
 *     path="/contact",
 *     tags={"contact"},
+*     security={
+*         {"ApiKey": {}}
+*     },
 *     summary="Get all contact messages",
 *     @OA\Response(
 *         response=200,
@@ -13,6 +18,7 @@ require_once __DIR__ . '/../services/ContactService.php';
 * )
 */
 Flight::route('GET /contact', function(){
+    Flight::auth_middleware()->requireAdmin();
     Flight::json(Flight::ContactService()->getAllMessages());
 });
 
@@ -21,6 +27,9 @@ Flight::route('GET /contact', function(){
 *     path="/contact/{id}",
 *     tags={"contact"},
 *     summary="Get contact message by ID",
+*     security={
+*         {"ApiKey": {}}
+*     },
 *     @OA\Parameter(
 *         name="id",
 *         in="path",
@@ -35,6 +44,7 @@ Flight::route('GET /contact', function(){
 * )
 */
 Flight::route('GET /contact/@id', function($id){
+    Flight::auth_middleware()->requireAdmin();
     Flight::json(Flight::ContactService()->getMessageById($id));
 });
 
@@ -43,6 +53,9 @@ Flight::route('GET /contact/@id', function($id){
 *     path="/contact",
 *     tags={"contact"},
 *     summary="Create a new contact message",
+*     security={
+*         {"ApiKey": {}}
+*     },
 *     @OA\RequestBody(
 *         required=true,
 *         @OA\JsonContent(

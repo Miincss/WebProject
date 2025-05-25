@@ -28,67 +28,8 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td><img src="images/shoe_dog.jpg" alt="Shoe Dog" class="book-thumbnail"></td>
-                                    <td>Shoe Dog</td>
-                                    <td>Phil Knight</td>
-                                    <td>Biography, Business</td>
-                                    <td>2 reviews</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-primary me-2" onclick="editBook(1)" data-bs-toggle="modal" data-bs-target="#editBookModal">
-                                            <i class="icon icon-edit"></i> Edit
-                                        </button>
-                                        <button class="btn btn-sm btn-danger" onclick="deleteBook(1)">
-                                            <i class="icon icon-trash"></i> Delete
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><img src="images/shoe_dog.jpg" alt="Shoe Dog" class="book-thumbnail"></td>
-                                    <td>Shoe Dog</td>
-                                    <td>Phil Knight</td>
-                                    <td>Biography, Business</td>
-                                    <td>2 reviews</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-primary me-2" onclick="editBook(1)" data-bs-toggle="modal" data-bs-target="#editBookModal">
-                                            <i class="icon icon-edit"></i> Edit
-                                        </button>
-                                        <button class="btn btn-sm btn-danger" onclick="deleteBook(1)">
-                                            <i class="icon icon-trash"></i> Delete
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><img src="images/shoe_dog.jpg" alt="Shoe Dog" class="book-thumbnail"></td>
-                                    <td>Shoe Dog</td>
-                                    <td>Phil Knight</td>
-                                    <td>Biography, Business</td>
-                                    <td>2 reviews</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-primary me-2" onclick="editBook(1)" data-bs-toggle="modal" data-bs-target="#editBookModal">
-                                            <i class="icon icon-edit"></i> Edit
-                                        </button>
-                                        <button class="btn btn-sm btn-danger" onclick="deleteBook(1)">
-                                            <i class="icon icon-trash"></i> Delete
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><img src="images/shoe_dog.jpg" alt="Shoe Dog" class="book-thumbnail"></td>
-                                    <td>Shoe Dog</td>
-                                    <td>Phil Knight</td>
-                                    <td>Biography, Business</td>
-                                    <td>2 reviews</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-primary me-2" onclick="editBook(1)" data-bs-toggle="modal" data-bs-target="#editBookModal">
-                                            <i class="icon icon-edit"></i> Edit
-                                        </button>
-                                        <button class="btn btn-sm btn-danger" onclick="deleteBook(1)">
-                                            <i class="icon icon-trash"></i> Delete
-                                        </button>
-                                    </td>
-                                </tr>
+                            <tbody id="admin-books-table-body">
+                                <!-- Books will be loaded here dynamically -->
                             </tbody>
                         </table>
                     </div>
@@ -229,3 +170,234 @@
         </div>
     </div>
 </section>
+
+<script src="js/review-service.js"></script>
+<script>
+    $(document).ready(function() {
+        // Function to render books in the admin table
+        function renderAdminBooks(books) {
+            const container = $('#admin-books-table-body');
+            container.empty(); // Clear existing content
+
+            if (books && books.length > 0) {
+                books.forEach(book => {
+                    const bookRowHtml = `
+                        <tr>
+                            <td><img src="images/${book.image}" alt="${book.title}" class="book-thumbnail" style="height: 50px;"></td>
+                            <td>${book.title}</td>
+                            <td>${book.author}</td>
+                            <td>${book.genre}</td>
+                            <td>${book.reviews ? book.reviews.length : 0} reviews</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary me-2 edit-book-btn" data-id="${book.id}" data-bs-toggle="modal" data-bs-target="#editBookModal">
+                                    <i class="icon icon-edit"></i> Edit
+                                </button>
+                                <button class="btn btn-sm btn-danger delete-book-btn" data-id="${book.id}">
+                                    <i class="icon icon-trash"></i> Delete
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                    container.append(bookRowHtml);
+                });
+            } else {
+                container.html('<tr><td colspan="6">No books found.</td></tr>');
+            }
+        }
+
+        // Function to fetch and display books in the admin table
+        function fetchAndDisplayAdminBooks() {
+            BookService.getAllBooks(function(books) {
+                renderAdminBooks(books);
+            }, function(error) {
+                console.error('Error fetching books for admin:', error);
+                $('#admin-books-table-body').html('<tr><td colspan="6">Error loading books.</td></tr>');
+            });
+        }
+
+        // Initial load of books in the admin table
+        fetchAndDisplayAdminBooks();
+
+        // Handle Add Book Form Submission
+        $('#addBookForm').on('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const bookData = {};
+            formData.forEach((value, key) => {
+                bookData[key] = value;
+            });
+
+            // Extract data from the form
+            const newBook = {
+                title: $(this).find('input[type="text"][required]').eq(0).val(), // Assuming first required text input is title
+                author: $(this).find('input[type="text"][required]').eq(1).val(), // Assuming second required text input is author
+                genre: $(this).find('input[type="text"][required]').eq(2).val(), // Assuming third required text input is genre
+                description: $(this).find('textarea[required]').val(),
+                // Image handling will require more complex logic (e.g., file upload)
+                // For now, we'll use a placeholder or handle it separately if the backend supports file uploads
+                image: 'default.png' // Placeholder
+            };
+
+            // Call the BookService to add the book
+            BookService.addBook(newBook, function(response) {
+                console.log('Book added successfully:', response);
+                alert('Book added successfully!');
+                $('#addBookModal').modal('hide');
+                fetchAndDisplayAdminBooks(); // Refresh the table
+            }, function(error) {
+                console.error('Error adding book:', error);
+                alert('Error adding book.');
+            });
+        });
+
+        // Handle Edit Book Button Click (to populate modal)
+        $(document).on('click', '.edit-book-btn', function() {
+            const bookId = $(this).data('id');
+            // Fetch book data and populate the edit modal
+            BookService.getBookById(bookId, function(book) {
+                $('#editBookModal').find('input[type="text"][value="Shoe Dog"]').val(book.title); // Assuming this is the title input
+                $('#editBookModal').find('input[type="text"][value="Phil Knight"]').val(book.author); // Assuming this is the author input
+                $('#editBookModal').find('input[type="text"][value="Biography, Business"]').val(book.genre); // Assuming this is the genre input
+                $('#editBookModal').find('textarea').val(book.description);
+                // Update the image source if available
+                if (book.image) {
+                    $('#editBookModal').find('.img-thumbnail').attr('src', 'images/' + book.image);
+                }
+                // Populate other fields as needed
+                $('#editBookModal').data('book-id', book.id); // Store book ID for update
+
+                // Fetch and display reviews for the book
+                ReviewService.getReviewsByBookId(book.id, function(reviews) {
+                    renderBookReviews(reviews);
+                }, function(error) {
+                    console.error('Error fetching reviews for book:', error);
+                    $('#bookReviews .reviews-list').html('<p>Error loading reviews.</p>');
+                });
+
+            }, function(error) {
+                console.error('Error fetching book for edit:', error);
+                alert('Error loading book details.');
+            });
+        });
+
+        // Handle Edit Book Form Submission
+        $('#editBookForm').on('submit', function(e) {
+            e.preventDefault();
+
+            const bookId = $('#editBookModal').data('book-id');
+            const formData = new FormData(this);
+            const updatedBookData = {};
+            formData.forEach((value, key) => {
+                updatedBookData[key] = value;
+            });
+
+            // Extract updated data from the form
+             const updatedBook = {
+                title: $(this).find('input[type="text"][value="Shoe Dog"]').val(), // Assuming this is the title input
+                author: $(this).find('input[type="text"][value="Phil Knight"]').val(), // Assuming this is the author input
+                genre: $(this).find('input[type="text"][value="Biography, Business"]').val(), // Assuming this is the genre input
+                description: $(this).find('textarea').val(),
+                // Image handling will require more complex logic (e.g., file upload)
+                // For now, we'll use the existing image or handle it separately
+                image: $('#editBookModal').find('.img-thumbnail').attr('src').replace('images/', '') // Get current image name
+            };
+
+            // Call the BookService to update the book
+            BookService.updateBook(bookId, updatedBook, function(response) {
+                console.log('Book updated successfully:', response);
+                alert('Book updated successfully!');
+                $('#editBookModal').modal('hide');
+                fetchAndDisplayAdminBooks(); // Refresh the table
+            }, function(error) {
+                console.error('Error updating book:', error);
+                alert('Error updating book.');
+            });
+        });
+
+        // Handle Delete Book Button Click
+        $(document).on('click', '.delete-book-btn', function() {
+            const bookId = $(this).data('id');
+            if (confirm('Are you sure you want to delete this book?')) {
+                // Call the BookService to delete the book
+                BookService.deleteBook(bookId, function(response) {
+                    console.log('Book deleted successfully:', response);
+                    alert('Book deleted successfully!');
+                    fetchAndDisplayAdminBooks(); // Refresh the table
+                }, function(error) {
+                    console.error('Error deleting book:', error);
+                    alert('Error deleting book.');
+                });
+            }
+        });
+
+        // Handle Delete Review Button Click (within Edit Book Modal)
+        $(document).on('click', '.delete-review-btn', function() {
+            const reviewId = $(this).data('id');
+            const bookId = $('#editBookModal').data('book-id'); // Get the current book ID
+            if (confirm('Are you sure you want to delete this review?')) {
+                // Call the ReviewService to delete the review
+                ReviewService.deleteReview(reviewId, function(response) {
+                    console.log('Review deleted successfully:', response);
+                    alert('Review deleted successfully!');
+                    // Refresh the reviews list after deletion
+                    ReviewService.getReviewsByBookId(bookId, function(reviews) {
+                        renderBookReviews(reviews);
+                    }, function(error) {
+                        console.error('Error fetching reviews after deletion:', error);
+                        $('#bookReviews .reviews-list').html('<p>Error loading reviews.</p>');
+                    });
+                }, function(error) {
+                    console.error('Error deleting review:', error);
+                    alert('Error deleting review.');
+                });
+            }
+        });
+
+        // Function to render reviews in the edit book modal
+        function renderBookReviews(reviews) {
+            const container = $('#bookReviews .reviews-list');
+            container.empty(); // Clear existing content
+
+            if (reviews && reviews.length > 0) {
+                reviews.forEach(review => {
+                    const reviewHtml = `
+                        <div class="review-item mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div>
+                                    <strong>${review.user_name}</strong>
+                                    <div class="stars">
+                                        ${generateStarRating(review.rating)}
+                                    </div>
+                                </div>
+                                <div>
+                                    <button class="btn btn-sm btn-danger delete-review-btn" data-id="${review.id}">
+                                        <i class="icon icon-trash"></i> Delete
+                                    </button>
+                                </div>
+                            </div>
+                            <p class="review-text">${review.comment}</p>
+                        </div>
+                    `;
+                    container.append(reviewHtml);
+                });
+            } else {
+                container.html('<p>No reviews found for this book.</p>');
+            }
+        }
+
+        // Helper function to generate star rating HTML
+        function generateStarRating(rating) {
+            let starsHtml = '';
+            for (let i = 0; i < 5; i++) {
+                if (i < rating) {
+                    starsHtml += '<i class="icon icon-star"></i>'; // Filled star
+                } else {
+                    starsHtml += '<i class="icon icon-star-o"></i>'; // Empty star (assuming you have an empty star icon)
+                }
+            }
+            return starsHtml;
+        }
+
+    });
+</script>

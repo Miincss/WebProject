@@ -31,7 +31,7 @@ try {
 
 echo "\nTesting Book Operations:\n";
 try {
-    $bookId = $bookDao->insert([
+    $bookId = $bookDao->add([
         'title' => 'Test Book',
         'author' => 'Test Author',
         'description' => 'A test book description',
@@ -50,7 +50,7 @@ try {
 
 echo "\nTesting Review Operations:\n";
 try {
-    $reviewId = $reviewDao->insert([
+    $reviewId = $reviewDao->add([
         'user_id' => 1,
         'book_id' => 1,
         'rating' => 5,
@@ -66,7 +66,7 @@ try {
 
 echo "\nTesting Newsletter Operations:\n";
 try {
-    $subscriptionId = $newsletterDao->insert([
+    $subscriptionId = $newsletterDao->add([
         'user_id' => 1,
         'email' => 'john_' . time() . '@example.com'
     ]);
@@ -81,7 +81,7 @@ try {
 
 echo "\nTesting Contact Operations:\n";
 try {
-    $messageId = $contactDao->insert([
+    $messageId = $contactDao->add([
         'user_id' => 1,
         'name' => 'John Doe',
         'email' => 'john_' . time() . '@example.com',

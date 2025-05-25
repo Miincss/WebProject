@@ -1,11 +1,15 @@
 <?php
 require_once __DIR__ . '/../services/BookService.php';
+require_once __DIR__. '/../middleware/AuthMiddleware.php';
 
 /**
 * @OA\Get(
 *     path="/books",
 *     tags={"books"},
 *     summary="Get all books",
+*     security={
+*         {"ApiKey": {}}
+*     },
 *     @OA\Response(
 *         response=200,
 *         description="List of all books"
@@ -29,6 +33,9 @@ Flight::route('GET /books', function(){
 * @OA\Get(
 *     path="/books/featured",
 *     tags={"books"},
+*     security={
+*         {"ApiKey": {}}
+*     },
 *     summary="Get first three featured books",
 *     @OA\Response(
 *         response=200,
@@ -45,6 +52,9 @@ Flight::route('GET /books/featured', function(){
 *     path="/books/genre/{genre}",
 *     tags={"books"},
 *     summary="Get books by genre",
+*     security={
+*         {"ApiKey": {}}
+*     },
 *     @OA\Parameter(
 *         name="genre",
 *         in="path",
@@ -67,6 +77,9 @@ Flight::route('GET /books/genre/@genre', function($genre){
 *     path="/books/{id}",
 *     tags={"books"},
 *     summary="Get book by ID",
+*     security={
+*         {"ApiKey": {}}
+*     },
 *     @OA\Parameter(
 *         name="id",
 *         in="path",
@@ -89,6 +102,9 @@ Flight::route('GET /books/@id', function($id){
 *     path="/books",
 *     tags={"books"},
 *     summary="Create a new book",
+*     security={
+*         {"ApiKey": {}}
+*     },
 *     @OA\RequestBody(
 *         required=true,
 *         @OA\JsonContent(
@@ -107,6 +123,7 @@ Flight::route('GET /books/@id', function($id){
 * )
 */
 Flight::route('POST /books', function(){
+    Flight::auth_middleware()->requireAdmin();
     $request = Flight::request()->data->getData();
     Flight::json(Flight::BookService()->addBook($request));
 });
@@ -116,6 +133,9 @@ Flight::route('POST /books', function(){
 *     path="/books/{id}",
 *     tags={"books"},
 *     summary="Update an existing book",
+*     security={
+*         {"ApiKey": {}}
+*     },
 *     @OA\Parameter(
 *         name="id",
 *         in="path",
@@ -141,6 +161,7 @@ Flight::route('POST /books', function(){
 * )
 */
 Flight::route('PUT /books/@id', function($id){
+    Flight::auth_middleware()->requireAdmin();
     $request = Flight::request()->data->getData();
     Flight::json(Flight::BookService()->updateBook($id, $request));
 });
@@ -150,6 +171,9 @@ Flight::route('PUT /books/@id', function($id){
 *     path="/books/{id}",
 *     tags={"books"},
 *     summary="Delete a book",
+*     security={
+*         {"ApiKey": {}}
+*     },
 *     @OA\Parameter(
 *         name="id",
 *         in="path",
@@ -164,6 +188,7 @@ Flight::route('PUT /books/@id', function($id){
 * )
 */
 Flight::route('DELETE /books/@id', function($id){
+    Flight::auth_middleware()->requireAdmin();
     Flight::json(Flight::BookService()->deleteBook($id));
 });
 

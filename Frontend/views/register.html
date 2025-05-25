@@ -21,6 +21,9 @@
                             <input type="email" class="form-control" placeholder="Email Address" required>
                         </div>
                         <div class="mb-4">
+                            <input type="username" class="form-control" placeholder="Username" required>
+                        </div>
+                        <div class="mb-4">
                             <input type="password" class="form-control" placeholder="Password" required>
                         </div>
                         <div class="mb-4">
@@ -47,3 +50,40 @@
         </div>
     </div>
 </section>
+
+<script>
+    $(document).ready(function() {
+        $('#register-form').on('submit', function(e) {
+            e.preventDefault();
+
+            const firstName = $(this).find('input[placeholder="First Name"]').val();
+            const lastName = $(this).find('input[placeholder="Last Name"]').val();
+            const email = $(this).find('input[type="email"]').val();
+            const username = $(this).find('input[placeholder="Username"]').val();
+            const password = $(this).find('input[type="password"]').val();
+            const confirmPassword = $(this).find('input[placeholder="Confirm Password"]').val();
+
+            if (password !== confirmPassword) {
+                alert('Passwords do not match.');
+                return;
+            }
+
+            AuthService.register({
+                first_name: firstName,
+                last_name: lastName,
+                email: email,
+                username: username,
+                password: password
+            }, function(response) {
+                // Handle successful registration (e.g., show success message, redirect to login)
+                console.log('Registration successful:', response);
+                alert('Registration successful! Please login.');
+                window.location.hash = '#login';
+            }, function(error) {
+                // Handle registration error (e.g., show error message)
+                console.error('Registration failed:', error);
+                alert('Registration failed. Please try again.');
+            });
+        });
+    });
+</script>

@@ -1,11 +1,16 @@
 <?php
 require_once __DIR__ . '/../services/NewsletterService.php';
+require_once __DIR__. '/../middleware/AuthMiddleware.php';
+
 
 /**
 * @OA\Get(
 *     path="/newsletter",
 *     tags={"newsletter"},
 *     summary="Get all newsletter subscriptions",
+*     security={
+*         {"ApiKey": {}}
+*     },
 *     @OA\Response(
 *         response=200,
 *         description="List of all newsletter subscriptions"
@@ -13,6 +18,7 @@ require_once __DIR__ . '/../services/NewsletterService.php';
 * )
 */
 Flight::route('GET /newsletter', function(){
+    Flight::auth_middleware()->requireAdmin();
     Flight::json(Flight::NewsletterService()->getAllSubscriptions());
 });
 
@@ -22,6 +28,9 @@ Flight::route('GET /newsletter', function(){
 *     path="/newsletter",
 *     tags={"newsletter"},
 *     summary="Add a new newsletter subscription",
+*     security={
+*         {"ApiKey": {}}
+*     },
 *     @OA\RequestBody(
 *         required=true,
 *         @OA\JsonContent(

@@ -29,13 +29,13 @@ class BaseService {
         }
     }
 
-    public function insert($data)
+    public function add($data)
     {
         if (empty($data) || !is_array($data)) {
             throw new Exception("Invalid data provided for insertion");
         }
         try {
-            return $this->dao->insert($data);
+            return $this->dao->add($data);
         } catch (Exception $e) {
             throw new Exception("Error inserting record: " . $e->getMessage());
         }

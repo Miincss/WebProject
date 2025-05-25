@@ -1,11 +1,16 @@
 <?php
 require_once __DIR__ . '/../services/ReviewService.php';
+require_once __DIR__. '/../middleware/AuthMiddleware.php';
+
 
 /**
 * @OA\Get(
 *     path="/reviews/book/{id}",
 *     tags={"reviews"},
 *     summary="Get reviews by book ID",
+*     security={
+*         {"ApiKey": {}}
+*     },
 *     @OA\Parameter(
 *         name="id",
 *         in="path",
@@ -28,6 +33,9 @@ Flight::route('GET /reviews/book/@id', function($id){
 *     path="/reviews/{id}",
 *     tags={"reviews"},
 *     summary="Get review by ID",
+*     security={
+*         {"ApiKey": {}}
+*     },
 *     @OA\Parameter(
 *         name="id",
 *         in="path",
@@ -42,6 +50,7 @@ Flight::route('GET /reviews/book/@id', function($id){
 * )
 */
 Flight::route('GET /reviews/@id', function($id){
+    Flight::auth_middleware()->requireSelfOrAdmin($id);
     Flight::json(Flight::ReviewService()->getByReviewId($id));
 });
 
@@ -50,6 +59,9 @@ Flight::route('GET /reviews/@id', function($id){
 *     path="/reviews",
 *     tags={"reviews"},
 *     summary="Create a new review",
+*     security={
+*         {"ApiKey": {}}
+*     },
 *     @OA\RequestBody(
 *         required=true,
 *         @OA\JsonContent(
@@ -76,6 +88,9 @@ Flight::route('POST /reviews', function(){
 *     path="/reviews/{id}",
 *     tags={"reviews"},
 *     summary="Delete a review",
+*     security={
+*         {"ApiKey": {}}
+*     },
 *     @OA\Parameter(
 *         name="id",
 *         in="path",
@@ -90,5 +105,6 @@ Flight::route('POST /reviews', function(){
 * )
 */
 Flight::route('DELETE /reviews/@id', function($id){
+    Flight::auth_middleware()->requireAdmin();
     Flight::json(Flight::ReviewService()->deleteReview($id));
 });
